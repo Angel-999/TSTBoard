@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Layout</title>
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="skeleton.css">
+    <script src="https://kit.fontawesome.com/a2b6c08f57.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <dialog login-modal class="form-container" id="login-modal">
+        <p class="title">Welcome back</p>
+        <form class="form">
+            <input type="email" class="input" placeholder="Email">
+            <input type="password" class="input" placeholder="Password">
+            <p class="page-link">
+                <span class="page-link-label">Forgot Password?</span>
+            </p>
+            <button class="form-btn">Log in</button>
+        </form>
+        <p class="sign-up-label">
+            Don't have an account?<span class="sign-up-link">Sign up</span>
+        </p>
+        <div class="buttons-container">
+            <div class="apple-login-button">
+                <svg stroke="currentColor" fill="currentColor" stroke-width="0" class="apple-icon"
+                    viewBox="0 0 1024 1024" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M747.4 535.7c-.4-68.2 30.5-119.6 92.9-157.5-34.9-50-87.7-77.5-157.3-82.8-65.9-5.2-138 38.4-164.4 38.4-27.9 0-91.7-36.6-141.9-36.6C273.1 298.8 163 379.8 163 544.6c0 48.7 8.9 99 26.7 150.8 23.8 68.2 109.6 235.3 199.1 232.6 46.8-1.1 79.9-33.2 140.8-33.2 59.1 0 89.7 33.2 141.9 33.2 90.3-1.3 167.9-153.2 190.5-221.6-121.1-57.1-114.6-167.2-114.6-170.7zm-105.1-305c50.7-60.2 46.1-115 44.6-134.7-44.8 2.6-96.6 30.5-126.1 64.8-32.5 36.8-51.6 82.3-47.5 133.6 48.4 3.7 92.6-21.2 129-63.7z">
+                    </path>
+                </svg>
+                <span>Log in with Apple</span>
+            </div>
+            <button class="google-login-button" id="login-btn">
+                <svg stroke="currentColor" fill="currentColor" stroke-width="0" version="1.1" x="0px" y="0px"
+                    class="google-icon" viewBox="0 0 48 48" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
+                    <path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12
+      c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24
+      c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"></path>
+                    <path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657
+      C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"></path>
+                    <path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36
+      c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"></path>
+                    <path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571
+      c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z">
+                    </path>
+                </svg>
+                <span>Log in with Google</span>
+            </button>
+        </div>
+    </dialog>
+    <dialog add-modal style="padding: 50px; z-index: 6;" class="add-modal">
+        <div id="loadingOverlay" style="display: none;">
+            <span style=" z-index: 5; display: flex; justify-content: center; align-items: center;  position: fixed; width: 100%; height: 100%; font-size: large;">Loading...</span>
+            <div class="spinner">
+                <div class="spinner1"></div>
+            </div>
+        </div>
+        <form class="form">
+            <p data-translate="modal_title" class="title">Add Truck</p>
+            <label data-translate="truck_number_label">Truck Number</label>
+            <input data-translate="truck_number_label" id="TruckNumberInputField" type="text" class="input"
+                placeholder="Truck Number" autocomplete="off"></input>
+            <label data-translate="truck_picture_label">Truck Picture</label>
+            <button type="button" class="container-btn-file" id="uploadButton">
+                <i class="fa-solid fa-cloud-arrow-up"></i>
+                <span data-translate="upload_button_text">Upload File</span>
+                <input id="fileInput" class="file" name="text" type="file" accept="image/*">
+            </button>
+            <canvas id="canvas" style="display:none;"></canvas>
+
+
+
+
+            <button data-translate="add_button_text" class="form-btn" id="form-add">Add</button>
+
+        </form>
+    </dialog>
+    <script>
+        const loginModal = document.getElementById('login-modal');
+        loginModal.showModal();
+    </script>
+    <style id="themeSelector"></style>
+
+
+    <div class="top-bar">
+        <div style="display: flex; align-items: center;">
+            <div class="menu-btn">
+                <input type="checkbox" id="checkbox">
+                <label for="checkbox" class="toggle">
+                    <div class="bars" id="bar1"></div>
+                    <div class="bars" id="bar2"></div>
+                    <div class="bars" id="bar3"></div>
+                </label>
+            </div>
+            <div class="logo" style="margin-left: 10px;">TST Board</div>
+        </div>
+        <div class="search-bar">
+            <input type="text" placeholder="Search" id="search-bar">
+            <button id="search-btn">Search</button>
+        </div>
+
+        <div class="user-profile">
+            <div class="tooltip" open-modal>
+                <div class="icon"><i class="fa-solid fa-file-circle-plus"></i></div>
+                <div class="tooltiptext">Add Truck</div>
+            </div>
+            <img src="" alt="Profile picture" id="profile-picture" draggable="false" class="skeleton">
+            <div class="dropdown-menu" id="dropdown-menu">
+                <ul>
+                    <li><img src="" alt="Profile picture" id="profile-picture2" draggable="false" class="skeleton">
+                        <div style="padding-left: 10px;">
+                            <span id="user-name"></span><br>
+                            <span id="user-team">Role</span>
+                        </div>
+                    </li>
+                    <li><i class="fa-regular fa-eye"></i></i>
+                        <span>Theme:</span>
+                        <select id="theme-select" class="theme-selector">
+                            <option value="light dark">System Default</option>
+                            <option value="light">Light Theme</option>
+                            <option value="dark">Dark Theme</option>
+                        </select>
+                    </li>
+                    <li id="logout-btn"><i class="fa-solid fa-arrow-right-from-bracket"></i>Log out</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="sidebar" id="sidebar">
+            <ul>
+                <a href="#" data-role="Administrator,Dispatcher">
+                    <li><i class="fa-solid fa-house-chimney"></i>Inicio</li>
+                </a>
+                <a href="#" data-role="Administrator,Dispatcher">
+                    <li><i class="fa-solid fa-building-user"></i>Clientes</li>
+                </a>
+                <a href="#" data-role="Administrator,Dispatcher,Driver">
+                    <li><i class="fa-solid fa-boxes-packing"></i>Cargas</li>
+                </a>
+                <a href="#" data-role="Administrator,Dispatcher">
+                    <li><i class="fa-solid fa-users"></i>Brokers</li>
+                </a>
+                <a href="#" data-role="Administrator,Dispatcher">
+                    <li><i class="fa-solid fa-id-card"></i>Conductores</li>
+                </a>
+                <a href="#" data-role="Administrator,Dispatcher,Driver">
+                    <li class="active"><i class="fa-solid fa-truck-moving"></i>Trailers</li>
+                </a>
+                <a href="#" data-role="Administrator,Dispatcher,Driver">
+                    <li><i class="fa-solid fa-trailer"></i>Equipo</li>
+                </a>
+            </ul>
+        </div>
+        <div class="main-content">
+            <main id="main">
+                <div class="video-grid" id="video-grid">
+                    <template id="card-template">
+                        <a data-link href="view.html?" class="video-card" style="display: block;">
+
+                            <img data-thumbnail loading="lazy" src="" class="video-thumbnail skeleton"
+                                draggable="false">
+
+                            <div data-title class="video-title skeleton" style="--skeletonWidth:35%">Truck Number
+                            </div>
+
+                            <div data-translate="video_info" class="video-info skeleton" style="--skeletonWidth:75%">
+                                Click to view details...</div>
+
+                        </a>
+                    </template>
+                </div>
+            </main>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/appwrite@14.0.1"></script>
+    <script src="../dist/main.js"></script>
+    <script>
+        const openButon = document.querySelector("[open-modal]")
+            const modal = document.querySelector("[add-modal]")
+            openButon.addEventListener("click", () => {
+                modal.showModal()
+            })
+
+            modal.addEventListener("click", e => {
+                const dialogDimensions = modal.getBoundingClientRect()
+                if (
+                    e.clientX < dialogDimensions.left ||
+                    e.clientX > dialogDimensions.right ||
+                    e.clientY < dialogDimensions.top ||
+                    e.clientY > dialogDimensions.bottom
+                ) {
+                    modal.close()
+                }
+            })
+
+
+
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const theme = localStorage.getItem("color-scheme");
+            setInitialColorScheme(theme || "light dark");
+            const profilePicture = document.getElementById("profile-picture");
+            const dropdownMenu = document.getElementById("dropdown-menu");
+            const themeSelect = document.getElementById("theme-select");
+
+            profilePicture.addEventListener("click", function () {
+                dropdownMenu.style.display = dropdownMenu.style.display === "block" ? "none" : "block";
+            });
+
+            document.addEventListener("click", function (event) {
+                if (!profilePicture.contains(event.target) && !dropdownMenu.contains(event.target)) {
+                    dropdownMenu.style.display = "none";
+                }
+            });
+
+            themeSelect.addEventListener("change", function () {
+                setColorScheme(themeSelect.value);
+            });
+        });
+        function setInitialColorScheme(scheme) {
+            const themeSelect = document.getElementById("theme-select");
+            themeSelect.value = scheme;
+            const styleElement = document.getElementById('themeSelector');
+            styleElement.textContent = `:root { color-scheme: ${scheme}; }`;
+        }
+        function setColorScheme(scheme) {
+            localStorage.setItem("color-scheme", scheme);
+            const styleElement = document.getElementById('themeSelector');
+            styleElement.textContent = `:root { color-scheme: ${scheme}; }`;
+        }
+
+    </script>
+</body>
+
+</html>

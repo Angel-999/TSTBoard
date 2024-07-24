@@ -1,0 +1,29 @@
+{
+  "Trucks": {
+    "Clients_link": "Clients",
+    "Brokers_link": "Brokers",
+    "Loads_link": "Loads",
+    "Trucks_link": "Trucks",
+    "Trailers_link": "Trailers",
+    "modal_title": "Add Truck",
+    "truck_number_label": "Truck Number",
+    "truck_picture_label": "Truck Picture",
+    "upload_button_text": "Upload Picture",
+    "add_button_text": "Add",
+    "Title_Trcks": "Trucks",
+    "new_truck_button_text": "New Truck",
+    "video_info": "Click to view more..."
+  },
+  "services": {
+    "service_title": "Our Services",
+    "service_description": "We offer a variety of services to meet your needs."
+  },
+  "about": {
+    "about_title": "About Us",
+    "about_description": "Learn more about our company and team."
+  },
+  "contact": {
+    "contact_title": "Contact Us",
+    "contact_description": "Get in touch with us through the contact form below."
+  }
+}
