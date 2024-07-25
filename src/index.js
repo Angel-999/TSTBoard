@@ -75,9 +75,11 @@ async function getUser() {
             });
         }
 
-        const avatar = avatars.getInitials();
-        document.getElementById('profile-picture').src = avatar.href;
-        document.getElementById('profile-picture2').src = avatar.href;
+        const avatar = await avatars.getInitials();
+        const profilePicture = document.getElementById('profile-picture');
+        profilePicture.src = avatar.href;
+        const profilePicture2 = document.getElementById('profile-picture2');
+        profilePicture2.src = avatar.href;
         loadTrucks();
     }
     catch (error) {
@@ -86,12 +88,16 @@ async function getUser() {
     }
 }
 async function handleLogin() {
+    event.preventDefault();
     const Email = loginEmail.value.trim();
     const Password = loginPassword.value.trim();
-    await account.createEmailPasswordSession(Email, Password);
-    const session = await account.getSession('current');
-    console.log(session);
-    location.reload();
+    const promise = account.createEmailPasswordSession(Email, Password);
+
+    promise.then(function (response) {
+        location.reload();
+    }, function (error) {
+        window.alert(error); // Failure
+    });
 }
 async function handleLoginG() {
     account.createOAuth2Session(
