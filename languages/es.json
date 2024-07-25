@@ -1,17 +1,29 @@
 {
-  "Trucks": {
+  "Global": {
+    "Search_bar": "Buscar...",
+    "Home_link": "Inicio",
     "Clients_link": "Clientes",
-    "Brokers_link": "Brokers",
     "Loads_link": "Cargas",
+    "Brokers_link": "Brokers",
+    "Drivers_link": "Conductores",
     "Trucks_link": "Trailers",
-    "Trailers_link": "Cajas",
+    "Trailers_link": "Equipos",
+    "refresh_button_text": "Refrescar",
+    "theme_selector": "Tema: ",
+    "theme_dark": "Tema Oscuro",
+    "theme_light": "Tema Claro",
+    "theme_system": "Tema de dispositivo",
+    "language_selector": "Idioma: ",
+    "language_English": "Ingles",
+    "language_Spanish": "Español"
+  },
+  "Trucks": {
     "modal_title": "Agregar Trailer",
-    "truck_number_label": "Numero de Trailer",
-    "truck_picture_label": "Imagen del trailer",
+    "truck_number_label": "Numbero de Trailer",
+    "truck_picture_label": "Imagen de Trailer",
     "upload_button_text": "Subir Imagen",
     "add_button_text": "Agregar",
-    "Title_Trcks": "Trailers",
-    "new_truck_button_text": "Nuevo Trailer",
+    "new_truck_button_text": "Agregar Trailer",
     "video_info": "Haz clic para ver más..."
   },
   "services": {

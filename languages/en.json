@@ -1,17 +1,29 @@
 {
-  "Trucks": {
+  "Global": {
+    "Search_bar": "Search...",
+    "Home_link": "Home",
     "Clients_link": "Clients",
-    "Brokers_link": "Brokers",
     "Loads_link": "Loads",
+    "Brokers_link": "Brokers",
+    "Drivers_link": "Drivers",
     "Trucks_link": "Trucks",
-    "Trailers_link": "Trailers",
+    "Trailers_link": "Equipments",
+    "refresh_button_text": "Refresh",
+    "theme_selector": "Theme: ",
+    "theme_dark": "Dark Theme",
+    "theme_light": "Light Theme",
+    "theme_system": "System Default",
+    "language_selector": "Language: ",
+    "language_English": "English",
+    "language_Spanish": "Spanish"
+  },
+  "Trucks": {
     "modal_title": "Add Truck",
     "truck_number_label": "Truck Number",
     "truck_picture_label": "Truck Picture",
     "upload_button_text": "Upload Picture",
     "add_button_text": "Add",
-    "Title_Trcks": "Trucks",
-    "new_truck_button_text": "New Truck",
+    "new_truck_button_text": "Add Truck",
     "video_info": "Click to view more..."
   },
   "services": {

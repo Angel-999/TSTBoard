@@ -1,8 +1,13 @@
 import { account, avatars, databases, roles, storage } from "./appwrite.js";
 import { ID, Query } from "appwrite";
+const defaultLang = 'es'; // Fallback language
+const userLang = localStorage.getItem('userLang') || defaultLang;
+
+const languageSelect = document.getElementById("language-select");
 const loginBtn = document.getElementById('login-btn');
 const logoutBtn = document.getElementById('logout-btn');
-const loginModal = document.querySelector('[login-modal]');
+//const loginModal = document.querySelector('[login-modal]');
+const refreshBtn = document.getElementById('refresh-btn');
 const formAdd = document.getElementById('form-add');
 const fileInput = document.getElementById('fileInput');
 const searchBar = document.getElementById('search-bar');
@@ -17,47 +22,61 @@ document.addEventListener('DOMContentLoaded', () => {
 async function Initialize() {
     getUser();
     populateGrid(); // Populate with fake templates
-    //const currentPage = await getCurrentPage();
+    languageSelect.addEventListener("change", function () {
+        localStorage.setItem("userLang", languageSelect.value);
+        SetLanguage(languageSelect.value);
+
+    });
     loginBtn.addEventListener('click', handleLogin);
     logoutBtn.addEventListener('click', handleLogout);
     menuIcon.addEventListener('click', handleSideBar);
     formAdd.addEventListener('click', postTruck);
     fileInput.addEventListener('change', convertImage);
-    searchBar.addEventListener('input', searchTrucks);
+    searchBar.addEventListener('keyup', searchTrucksFromInput);
     searchBtn.addEventListener('click', searchTrucks);
-    //await loadLanguage(userLang, currentPage);
+    refreshBtn.addEventListener('click', checkForUpdates);
+    const currentPage = await getCurrentPage();
+    await loadLanguage(userLang, currentPage);
+
+}
+async function SetLanguage(lang) {
+    const currentPage = await getCurrentPage();
+    await loadLanguage(lang, currentPage);
 }
 function handleSideBar() {
     sideBar.classList.toggle('active');
 }
 async function getUser() {
     try {
-        loginModal.close();
-        const t_username = (await account.get()).name;
+        //loginModal.close();
+        const user = await account.get();
+        const t_username = user.name;
         const role = await roles.list();
         document.getElementById('user-name').textContent = t_username;
-        document.getElementById('user-team').textContent = role.teams[0].name;
-        // Get all the menu items
-        const menuItems = document.querySelectorAll('#sidebar a');
+        if (role.teams.length > 0) {
+            document.getElementById('user-team').textContent = role.teams[0].name;
+            // Get all the menu items
+            const menuItems = document.querySelectorAll('#sidebar a');
 
-        menuItems.forEach(item => {
-            // Get the roles that can see this item
-            const roles = item.getAttribute('data-role').split(',');
+            menuItems.forEach(item => {
+                // Get the roles that can see this item
+                const roles = item.getAttribute('data-role').split(',');
+                // Check if the current user's role is included
+                if (roles.includes(role.teams[0].name)) {
+                    item.style.display = 'block'; // Show the item
+                } else {
+                    item.style.display = 'none'; // Hide the item
+                }
+            });
+        }
 
-            // Check if the current user's role is included
-            if (roles.includes(role.teams[0].name)) {
-                item.style.display = 'block'; // Show the item
-            } else {
-                item.style.display = 'none'; // Hide the item
-            }
-        });
         const avatar = avatars.getInitials();
         document.getElementById('profile-picture').src = avatar.href;
         document.getElementById('profile-picture2').src = avatar.href;
         loadTrucks();
     }
     catch (error) {
-        loginModal.showModal();
+        //loginModal.showModal();
         document.getElementById('user-name').textContent = 'Not logged in';
     }
 }
@@ -112,7 +131,8 @@ async function postTruck() {
     location.reload();
 }
 
-
+const cooldownKey = 'lastApiCallTimestamp';
+const cooldownDuration = 5000; // 5 seconds = 5000 milliseconds(production),    60 seconds = 6000 milliseconds (development)    (Uses milliseconds)
 async function loadTrucks() {
     const trucksData = await databases.listDocuments('tst', '669cbcd30006ae923e3c');
     const truckList = Object.values(trucksData.documents);
@@ -121,12 +141,17 @@ async function loadTrucks() {
         //localStorage.setItem(cacheKey, JSON.stringify(result));
         // Clear the grid before loading actual trucks
         grid.innerHTML = '';
-
+        const key = 'video_info';
+        const response = await fetch(`../languages/${userLang}.json`);
+        const translations = await response.json();
+        const currentPage = await getCurrentPage();
         truckList.forEach(truck => {
             const div = cardTemplate.content.cloneNode(true);
             div.querySelector('[data-link]').href = "view.html?id=" + truck.$id;
             div.querySelector('[data-thumbnail]').src = truck.Picture;
             div.querySelector('[data-title]').textContent = truck.Number;
+            const info = translations[currentPage][key];
+            div.querySelector('[data-info]').textContent = info;
             grid.appendChild(div);
         });
 
@@ -138,6 +163,49 @@ async function loadTrucks() {
         console.error('Error:', error);
     }
 }
+async function checkForUpdates() {
+    const lastApiCall = localStorage.getItem(cooldownKey);
+    const now = new Date().getTime();
+
+    // Check if cooldown period has passed
+    if (lastApiCall && (now - lastApiCall < cooldownDuration)) {
+        console.log('Cooldown period has not passed');
+        return;
+    }
+    try {
+        localStorage.setItem(cooldownKey, now); // Update the last API call timestamp
+        const trucksData = await databases.listDocuments('tst', '669cbcd30006ae923e3c');
+        const truckList = Object.values(trucksData.documents);
+        try {
+            // Save the result to localStorage
+            //localStorage.setItem(cacheKey, JSON.stringify(result));
+            // Clear the grid before loading actual trucks
+            grid.innerHTML = '';
+
+            truckList.forEach(truck => {
+                const div = cardTemplate.content.cloneNode(true);
+                div.querySelector('[data-link]').href = "view.html?id=" + truck.$id;
+                div.querySelector('[data-thumbnail]').src = truck.Picture;
+                div.querySelector('[data-title]').textContent = truck.Number;
+                grid.appendChild(div);
+            });
+
+            const allSkeleton = document.querySelectorAll('.skeleton');
+            allSkeleton.forEach(item => {
+                item.classList.remove('skeleton');
+            });
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    } catch (error) {
+        console.error('Error checking for updates:', error);
+    }
+}
+async function searchTrucksFromInput() {
+    if (event.key == 'Enter' || searchBar.value == '') {
+        searchTrucks();
+    }
+}
 async function searchTrucks() {
     const trucksData = await databases.listDocuments(
         'tst',
@@ -147,18 +215,36 @@ async function searchTrucks() {
         ]
     );
     const truckList = Object.values(trucksData.documents);
-    console.log(truckList);
+    if(truckList.length == 0){
+        grid.innerHTML = '';
+        const fileURL = await storage.getFileView('669cbd410034f5902774', "66a19b800001e760d48d");
+        const div = cardTemplate.content.cloneNode(true);
+        div.querySelector('[data-link]').href = "#";
+        div.querySelector('[data-thumbnail]').src = fileURL;
+        div.querySelector('[data-title]').textContent = "No results Found";
+        grid.appendChild(div);
+        const allSkeleton = document.querySelectorAll('.skeleton');
+        allSkeleton.forEach(item => {
+            item.classList.remove('skeleton');
+        });
+        return;
+    }
     try {
         // Save the result to localStorage
         //localStorage.setItem(cacheKey, JSON.stringify(result));
         // Clear the grid before loading actual trucks
         grid.innerHTML = '';
-
+        const key = 'video_info';
+        const response = await fetch(`../languages/${userLang}.json`);
+        const translations = await response.json();
+        const currentPage = await getCurrentPage();
         truckList.forEach(truck => {
             const div = cardTemplate.content.cloneNode(true);
             div.querySelector('[data-link]').href = "view.html?id=" + truck.$id;
             div.querySelector('[data-thumbnail]').src = truck.Picture;
             div.querySelector('[data-title]').textContent = truck.Number;
+            const info = translations[currentPage][key];
+            div.querySelector('[data-info]').textContent = info;
             grid.appendChild(div);
             console.log(truck);
         });
@@ -309,5 +395,53 @@ function showLoader() {
 
 function hideLoader() {
     document.getElementById('loadingOverlay').style.display = 'none';
+}
+//#endregion
+
+
+
+//#region translation
+async function loadLanguage(lang, page) {
+    try {
+        const response = await fetch(`../languages/${lang}.json`);
+        if (!response.ok) throw new Error(`Could not load ${lang}.json translations`);
+        const translations = await response.json();
+        const languageSelect = document.getElementById("language-select");
+        languageSelect.value = lang;
+        // Update text content or placeholder based on the element type
+        document.querySelectorAll('[data-translate]').forEach(el => {
+            const key = el.getAttribute('data-translate');
+
+            // Check for global translation first, then page-specific translation
+            let translation = translations["Global"] && translations["Global"][key]
+                ? translations["Global"][key]
+                : null;
+
+            if (translations[page] && translations[page][key]) {
+                translation = translations[page][key];
+            }
+
+            if (translation) {
+                if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+                    el.setAttribute('placeholder', translation);
+                } else {
+                    el.innerText = translation;
+                }
+            }
+        });
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+
+function getCurrentPage() {
+    const path = window.location.href;
+    if (path.split('/').pop().split('.').shift() == "#" || path.split('/').pop().split('.').shift() == "" || path.split('/').pop().split('.').shift() == "Index") {
+        return "Trucks";
+    }
+    // Example: if URL is /services.html, return 'services'
+    return path.split('/').pop().split('.').shift();
+
 }
 //#endregion

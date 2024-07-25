@@ -79,10 +79,6 @@
 
         </form>
     </dialog>
-    <script>
-        const loginModal = document.getElementById('login-modal');
-        loginModal.showModal();
-    </script>
     <style id="themeSelector"></style>
 
 
@@ -96,17 +92,21 @@
                     <div class="bars" id="bar3"></div>
                 </label>
             </div>
-            <div class="logo" style="margin-left: 10px;">TST Board</div>
+            <div class="logo">TST Board</div>
         </div>
         <div class="search-bar">
-            <input type="text" placeholder="Search" id="search-bar">
-            <button id="search-btn">Search</button>
+            <input data-translate="Search_bar" type="text" placeholder="Search..." id="search-bar">
+            <button id="search-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
         </div>
 
         <div class="user-profile">
+            <div class="tooltip" id="refresh-btn">
+                <div class="icon"><i class="fa-solid fa-arrows-rotate" style="color :var(--clr-text)"></i></div>
+                <div class="tooltiptext" data-translate="refresh_button_text">Refresh</div>
+            </div>
             <div class="tooltip" open-modal>
-                <div class="icon"><i class="fa-solid fa-file-circle-plus"></i></div>
-                <div class="tooltiptext">Add Truck</div>
+                <div class="icon"><i class="fa-solid fa-file-circle-plus" style="color :var(--clr-text)"></i></div>
+                <div class="tooltiptext" data-translate="new_truck_button_text">Add Truck</div>
             </div>
             <img src="" alt="Profile picture" id="profile-picture" draggable="false" class="skeleton">
             <div class="dropdown-menu" id="dropdown-menu">
@@ -114,15 +114,22 @@
                     <li><img src="" alt="Profile picture" id="profile-picture2" draggable="false" class="skeleton">
                         <div style="padding-left: 10px;">
                             <span id="user-name"></span><br>
-                            <span id="user-team">Role</span>
+                            <span id="user-team">No Role!</span>
                         </div>
                     </li>
-                    <li><i class="fa-regular fa-eye"></i></i>
-                        <span>Theme:</span>
+                    <li><i class="fa-solid fa-globe"></i>
+                        <span data-translate="language_selector">Language:</span>
+                        <select id="language-select" class="theme-selector">
+                            <option data-translate="language_English" value="en">English</option>
+                            <option data-translate="language_Spanish" value="es">Spanish</option>
+                        </select>
+                    </li>
+                    <li><i class="fa-regular fa-eye"></i>
+                        <span data-translate="theme_selector">Theme:</span>
                         <select id="theme-select" class="theme-selector">
-                            <option value="light dark">System Default</option>
-                            <option value="light">Light Theme</option>
-                            <option value="dark">Dark Theme</option>
+                            <option data-translate="theme_system" value="light dark">System Default</option>
+                            <option data-translate="theme_light" value="light">Light Theme</option>
+                            <option data-translate="theme_dark" value="dark">Dark Theme</option>
                         </select>
                     </li>
                     <li id="logout-btn"><i class="fa-solid fa-arrow-right-from-bracket"></i>Log out</li>
@@ -134,25 +141,25 @@
         <div class="sidebar" id="sidebar">
             <ul>
                 <a href="#" data-role="Administrator,Dispatcher">
-                    <li><i class="fa-solid fa-house-chimney"></i>Inicio</li>
+                    <li><i class="fa-solid fa-house-chimney"></i><span data-translate="Home_link"></span></li>
                 </a>
                 <a href="#" data-role="Administrator,Dispatcher">
-                    <li><i class="fa-solid fa-building-user"></i>Clientes</li>
+                    <li><i class="fa-solid fa-building-user"></i><span data-translate="Clients_link"></span></li>
                 </a>
                 <a href="#" data-role="Administrator,Dispatcher,Driver">
-                    <li><i class="fa-solid fa-boxes-packing"></i>Cargas</li>
+                    <li><i class="fa-solid fa-boxes-packing"></i><span data-translate="Loads_link"></span></li>
                 </a>
                 <a href="#" data-role="Administrator,Dispatcher">
-                    <li><i class="fa-solid fa-users"></i>Brokers</li>
+                    <li><i class="fa-solid fa-users"></i><span data-translate="Brokers_link"></span></li>
                 </a>
                 <a href="#" data-role="Administrator,Dispatcher">
-                    <li><i class="fa-solid fa-id-card"></i>Conductores</li>
+                    <li><i class="fa-solid fa-id-card"></i><span data-translate="Drivers_link"></span></li>
                 </a>
                 <a href="#" data-role="Administrator,Dispatcher,Driver">
-                    <li class="active"><i class="fa-solid fa-truck-moving"></i>Trailers</li>
+                    <li class="active"><i class="fa-solid fa-truck-moving"></i><span data-translate="Trucks_link"></span></li>
                 </a>
                 <a href="#" data-role="Administrator,Dispatcher,Driver">
-                    <li><i class="fa-solid fa-trailer"></i>Equipo</li>
+                    <li><i class="fa-solid fa-trailer"></i><span data-translate="Trailers_link"></span></li>
                 </a>
             </ul>
         </div>
@@ -168,8 +175,7 @@
                             <div data-title class="video-title skeleton" style="--skeletonWidth:35%">Truck Number
                             </div>
 
-                            <div data-translate="video_info" class="video-info skeleton" style="--skeletonWidth:75%">
-                                Click to view details...</div>
+                            <div data-info data-translate="video_info" class="video-info skeleton" style="--skeletonWidth:75%"></div>
 
                         </a>
                     </template>
@@ -233,7 +239,6 @@
             const styleElement = document.getElementById('themeSelector');
             styleElement.textContent = `:root { color-scheme: ${scheme}; }`;
         }
-
     </script>
 </body>
 

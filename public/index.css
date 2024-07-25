@@ -5,8 +5,8 @@
   --clr-red: #ff3c00;
   --clr-background: light-dark(#ffffff, #0f0f0f);
   --clr-foreground: light-dark(#F3F3F3, #242424);
-  --clr-foreground-accent: light-dark(#CECECE, #303030);
-  --clr-foreground-light: light-dark(#b1b1b1, #444444);
+  --clr-foreground-accent: light-dark(#dddddd, #303030);
+  --clr-foreground-light: light-dark(#cfcfcf, #444444);
   --clr-text: light-dark(#000000, #ffffff);
   --clr-disabled-text: light-dark(#606060, #707070);
   --clr-button-text: light-dark(#000000, var(--clr-primary));
@@ -35,7 +35,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 20px;
+  padding: 10px 10px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   position: fixed;
   width: 100%;
@@ -46,6 +46,7 @@ body {
 .logo {
   font-size: 24px;
   font-weight: bold;
+  color: var(--clr-primary);
 }
 
 .search-bar {
@@ -183,11 +184,12 @@ ul li i {
 }
 
 .sidebar ul li:hover {
+  background-color: var(--clr-foreground);
   color: var(--clr-primary);
 }
 
 .sidebar ul .active {
-  background-color: var(--clr-foreground);
+  background-color: var(--clr-foreground-accent);
   color: var(--clr-primary);
   font-weight: 500;
 }
@@ -441,10 +443,11 @@ dialog {
 }
 
 .tooltip {
+  z-index: 10;
   position: relative;
   display: inline-block;
   cursor: pointer;
-  margin-right: 20px;
+  margin-right: 10px;
 }
 
 .tooltip:hover .tooltiptext {
@@ -455,14 +458,14 @@ dialog {
 .tooltiptext {
   visibility: hidden;
   background-color: var(--clr-foreground);
-  color: #fff;
+  color: var(--clr-text);
   text-align: center;
   border-radius: 5px;
   padding: 10px;
   position: absolute;
-  z-index: 5;
+  z-index: 10;
   top: 115%;
-  left: 200%;
+  left: 210%;
   margin-left: -100px;
   opacity: 0;
   transition: opacity 0.3s;
