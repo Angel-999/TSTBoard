@@ -57,6 +57,7 @@ async function getUser() {
         const user = await account.get();
         const t_username = user.name;
         const role = await roles.list();
+        const avatar = await avatars.getInitials();
         document.getElementById('user-name').textContent = t_username;
         if (role.teams.length > 0) {
             document.getElementById('user-team').textContent = role.teams[0].name;
@@ -75,7 +76,6 @@ async function getUser() {
             });
         }
 
-        const avatar = await avatars.getInitials();
         const profilePicture = document.getElementById('profile-picture');
         profilePicture.src = avatar.href;
         const profilePicture2 = document.getElementById('profile-picture2');
