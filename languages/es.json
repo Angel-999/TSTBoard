@@ -1,6 +1,7 @@
 {
   "Global": {
     "Search_bar": "Buscar...",
+    "Search_button_text": "Buscar",
     "Home_link": "Inicio",
     "Clients_link": "Clientes",
     "Loads_link": "Cargas",
@@ -15,7 +16,14 @@
     "theme_system": "Tema de dispositivo",
     "language_selector": "Idioma: ",
     "language_English": "Ingles",
-    "language_Spanish": "Español"
+    "language_Spanish": "Español",
+    "log_out": "Cerrar sesión",
+    "login_title": "Bienvenido",
+    "login_email": "Correo",
+    "login_password": "Contraseña",
+    "login_button_text": "Iniciar sesión",
+    "login_button_A_text": "Iniciar sesión con Apple",
+    "login_button_G_text": "Iniciar sesión con Google"
   },
   "Trucks": {
     "modal_title": "Agregar Trailer",

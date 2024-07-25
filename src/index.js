@@ -4,9 +4,12 @@ const defaultLang = 'es'; // Fallback language
 const userLang = localStorage.getItem('userLang') || defaultLang;
 
 const languageSelect = document.getElementById("language-select");
+const loginEmail = document.getElementById('login-email');
+const loginPassword = document.getElementById('login-password');
 const loginBtn = document.getElementById('login-btn');
+const loginBtnG = document.getElementById('login-btn-g');
 const logoutBtn = document.getElementById('logout-btn');
-//const loginModal = document.querySelector('[login-modal]');
+const loginModal = document.querySelector('[login-modal]');
 const refreshBtn = document.getElementById('refresh-btn');
 const formAdd = document.getElementById('form-add');
 const fileInput = document.getElementById('fileInput');
@@ -20,6 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
     Initialize();
 });
 async function Initialize() {
+    loginModal.showModal();
     getUser();
     populateGrid(); // Populate with fake templates
     languageSelect.addEventListener("change", function () {
@@ -28,6 +32,7 @@ async function Initialize() {
 
     });
     loginBtn.addEventListener('click', handleLogin);
+    loginBtnG.addEventListener('click', handleLoginG);
     logoutBtn.addEventListener('click', handleLogout);
     menuIcon.addEventListener('click', handleSideBar);
     formAdd.addEventListener('click', postTruck);
@@ -48,7 +53,7 @@ function handleSideBar() {
 }
 async function getUser() {
     try {
-        //loginModal.close();
+        loginModal.close();
         const user = await account.get();
         const t_username = user.name;
         const role = await roles.list();
@@ -76,11 +81,19 @@ async function getUser() {
         loadTrucks();
     }
     catch (error) {
-        //loginModal.showModal();
+        loginModal.showModal();
         document.getElementById('user-name').textContent = 'Not logged in';
     }
 }
 async function handleLogin() {
+    const Email = loginEmail.value.trim();
+    const Password = loginPassword.value.trim();
+    await account.createEmailPasswordSession(Email, Password);
+    const session = await account.getSession('current');
+    console.log(session);
+    location.reload();
+}
+async function handleLoginG() {
     account.createOAuth2Session(
         'google',
         'http://127.0.0.1:5500/public/',
@@ -141,7 +154,6 @@ async function loadTrucks() {
         //localStorage.setItem(cacheKey, JSON.stringify(result));
         // Clear the grid before loading actual trucks
         grid.innerHTML = '';
-        const key = 'video_info';
         const response = await fetch(`../languages/${userLang}.json`);
         const translations = await response.json();
         const currentPage = await getCurrentPage();
@@ -150,7 +162,7 @@ async function loadTrucks() {
             div.querySelector('[data-link]').href = "view.html?id=" + truck.$id;
             div.querySelector('[data-thumbnail]').src = truck.Picture;
             div.querySelector('[data-title]').textContent = truck.Number;
-            const info = translations[currentPage][key];
+            const info = translations[currentPage]['video_info'];
             div.querySelector('[data-info]').textContent = info;
             grid.appendChild(div);
         });
@@ -234,16 +246,16 @@ async function searchTrucks() {
         //localStorage.setItem(cacheKey, JSON.stringify(result));
         // Clear the grid before loading actual trucks
         grid.innerHTML = '';
-        const key = 'video_info';
         const response = await fetch(`../languages/${userLang}.json`);
         const translations = await response.json();
         const currentPage = await getCurrentPage();
+        console.log(currentPage);
         truckList.forEach(truck => {
             const div = cardTemplate.content.cloneNode(true);
             div.querySelector('[data-link]').href = "view.html?id=" + truck.$id;
             div.querySelector('[data-thumbnail]').src = truck.Picture;
             div.querySelector('[data-title]').textContent = truck.Number;
-            const info = translations[currentPage][key];
+            const info = translations[currentPage]['video_info'];
             div.querySelector('[data-info]').textContent = info;
             grid.appendChild(div);
             console.log(truck);
@@ -437,7 +449,8 @@ async function loadLanguage(lang, page) {
 
 function getCurrentPage() {
     const path = window.location.href;
-    if (path.split('/').pop().split('.').shift() == "#" || path.split('/').pop().split('.').shift() == "" || path.split('/').pop().split('.').shift() == "Index") {
+    const url = path.split('/').pop().split('.').shift();
+    if (url == "#" || url == "" || url == "Index") {
         return "Trucks";
     }
     // Example: if URL is /services.html, return 'services'

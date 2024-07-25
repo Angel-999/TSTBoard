@@ -1,6 +1,7 @@
 {
   "Global": {
     "Search_bar": "Search...",
+    "Search_button_text": "Search",
     "Home_link": "Home",
     "Clients_link": "Clients",
     "Loads_link": "Loads",
@@ -15,7 +16,14 @@
     "theme_system": "System Default",
     "language_selector": "Language: ",
     "language_English": "English",
-    "language_Spanish": "Spanish"
+    "language_Spanish": "Spanish",
+    "log_out": "Log out",
+    "login_title": "Welcome back",
+    "login_email": "Email",
+    "login_password": "Password",
+    "login_button_text": "Log in",
+    "login_button_A_text": "Log in with Apple",
+    "login_button_G_text": "Log in with Google"
   },
   "Trucks": {
     "modal_title": "Add Truck",

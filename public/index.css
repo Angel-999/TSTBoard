@@ -35,7 +35,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 10px;
+  padding: 10px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   position: fixed;
   width: 100%;
@@ -43,15 +43,32 @@ body {
   z-index: 2;
 }
 
+.left-section,
+.right-section {
+  display: flex;
+  align-items: center;
+}
+.right-section div{
+    margin-left: 5px;
+}
+.right-section .user-profile{
+  margin-left: 10px;
+}
 .logo {
+  /*Stop interactivity*/
+  user-select: none;
+  pointer-events: none;
   font-size: 24px;
   font-weight: bold;
   color: var(--clr-primary);
 }
 
 .search-bar {
+  flex-grow: 1;
   display: flex;
-  align-items: center;
+  justify-content: center;
+  max-width: 600px; /* Optional: limits the width of the search bar */
+  margin: 0 10px;
   width: 50%;
   border: 1px solid var(--clr-foreground);
   border-radius: 50px 50px 50px 50px;
@@ -66,8 +83,7 @@ body {
   outline: none;
 }
 
-.search-bar button {
-  padding: 8px 16px;
+.search-bar #search-btn {
   background-color: var(--clr-foreground);
   border-radius: 0 50px 50px 0;
   border: 1px solid var(--clr-foreground);
@@ -447,7 +463,6 @@ dialog {
   position: relative;
   display: inline-block;
   cursor: pointer;
-  margin-right: 10px;
 }
 
 .tooltip:hover .tooltiptext {
@@ -457,6 +472,7 @@ dialog {
 
 .tooltiptext {
   visibility: hidden;
+  opacity: 0;
   background-color: var(--clr-foreground);
   color: var(--clr-text);
   text-align: center;
@@ -465,9 +481,7 @@ dialog {
   position: absolute;
   z-index: 10;
   top: 115%;
-  left: 210%;
-  margin-left: -100px;
-  opacity: 0;
+  left: -50%;
   transition: opacity 0.3s;
 }
 
